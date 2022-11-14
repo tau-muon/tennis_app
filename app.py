@@ -1,13 +1,12 @@
-
 # Import Libraries
 
 import os
+
 import dash
-from dash import html, dcc
-from dash.dependencies import Input, Output
 import pandas as pd
 import plotly.graph_objs as go
-
+from dash import html, dcc
+from dash.dependencies import Input, Output
 
 # Read the data
 
@@ -16,11 +15,12 @@ path = os.path.join(dirname, "data/")
 
 df = pd.read_csv(path + "tennis_players_data.csv", index_col="player_id")
 df = df[df.active == "t"]
-df_radar = df[["name", "matches_win_percentage", "grand_slam_win_percentage", "tour_finals_win_percentage", \
+df_radar = df[["name", "matches_win_percentage", "grand_slam_win_percentage", "tour_finals_win_percentage",
                "olympics_matches_win_percentage", "davis_cup_matches_win_percentage", "hard_matches_win_percentage",
-               "clay_matches_win_percentage", \
+               "clay_matches_win_percentage",
                "grass_matches_win_percentage", "carpet_matches_win_percentage", "outdoor_matches_win_percentage",
                "indoor_matches_win_percentage"]]
+
 
 # Function for figures
 
@@ -65,8 +65,7 @@ def radar_chart(data, player_id_1, player_id_2):
 
 # ------------------------------------------------------ APP ------------------------------------------------------
 
-app = dash.Dash(__name__)
-
+app = dash.Dash(__name__, prevent_initial_callbacks=False)
 server = app.server
 
 # App Layout (HTML)
@@ -77,7 +76,8 @@ app.layout = html.Div(
             [
                 html.H1(children="Tennis Prediction"),
                 html.Label(
-                    "This app compares two players and tries to predict the winner if the selected players were tpo face off, the dropdown option gives players wgo were active till the end os 2021 season. ",
+                    "This app compares two players and tries to predict the winner if the selected players were to "
+                    "face off, the dropdown option gives players who were active till the end of 2021 season. ",
                     style={"color": "rgb(33 36 35)"},
                 ),
                 html.Img(
@@ -96,7 +96,7 @@ app.layout = html.Div(
             [
                 html.Div(
                     [
-                    html.Div([
+                        html.Div([
                             html.Div([
 
                                 html.Label("Select Player 1:"),
@@ -108,7 +108,6 @@ app.layout = html.Div(
                                     value=3819),
                             ],
 
-
                                 style={
                                     "margin": "10px",
                                     "display": "inline-block",
@@ -116,15 +115,15 @@ app.layout = html.Div(
                                     "padding-bottom": "15px",
                                     "width": "30%",
                                 }, ),
-                        html.Img(
-                            src=app.get_asset_url("player1.png"),
-                            style={
-                                "position": "relative",
-                                "width": "5%",
-                                "left": "10px",
-                                "top": "50px",
-                            },
-                        ),
+                            html.Img(
+                                src=app.get_asset_url("player1.png"),
+                                style={
+                                    "position": "relative",
+                                    "width": "5%",
+                                    "left": "10px",
+                                    "top": "50px",
+                                },
+                            ),
                             html.Div([
                                 html.Label("Select Player 2:"),
                                 html.Br(),
@@ -134,7 +133,6 @@ app.layout = html.Div(
                                     options=[{'label': i, 'value': j} for i, j in dict(zip(df.name, df.index)).items()],
                                     value=3333),
                             ],
-
 
                                 style={
                                     "margin": "10px",
@@ -146,17 +144,17 @@ app.layout = html.Div(
                                     "left": "150px",
                                 }, ),
                             html.Img(
-                            src=app.get_asset_url("player2.png"),
-                            style={
-                                "position": "relative",
-                                "width": "5%",
-                                "left": "200px",
-                                "top": "50px",
-                            },
-                        ),
+                                src=app.get_asset_url("player2.png"),
+                                style={
+                                    "position": "relative",
+                                    "width": "5%",
+                                    "left": "200px",
+                                    "top": "50px",
+                                },
+                            ),
 
-                        ],className="box" ),
-                                 html.Div(
+                        ], className="box"),
+                        html.Div(
                             [
                                 html.Div(
                                     [
@@ -247,7 +245,7 @@ app.layout = html.Div(
                             ],
                             className="row",
                         ),
-                                 html.Div(
+                        html.Div(
                             [
                                 html.Div(
                                     [
@@ -279,7 +277,7 @@ app.layout = html.Div(
                             ],
                             className="row",
                         ),
-                                 html.Div(
+                        html.Div(
                             [
                                 html.Div(
                                     [
@@ -307,9 +305,9 @@ app.layout = html.Div(
                                                 ),
                                                 ", ",
                                                 html.A(
-                                                    #"Second Refreence",
-                                                   #href="http://",
-                                                    #target="_blank",
+                                                    # "Second Refreence",
+                                                    # href="http://",
+                                                    # target="_blank",
                                                 ),
                                             ],
                                             style={"font-size": "12px"},
@@ -330,7 +328,7 @@ app.layout = html.Div(
 )
 
 
-# ------------------------------------------------------ Callbacks ------------------------------------------------------
+# --------------------------- Callbacks ------------------------------------------------------
 
 @app.callback(
     Output(component_id='radar_chart', component_property='figure'),
@@ -345,5 +343,5 @@ def update_plot(player1, player2):
     return fig
 
 
-if __name__ == "__main__":
-    app.run_server(debug=False)
+if __name__ == '__main__':
+    app.run_server(debug=True)
