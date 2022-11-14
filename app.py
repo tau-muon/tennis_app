@@ -10,10 +10,8 @@ from dash.dependencies import Input, Output
 
 # Read the data
 
-dirname = os.path.dirname(__file__)
-path = os.path.join(dirname, "data/")
 
-df = pd.read_csv(path + "tennis_players_data.csv", index_col="player_id")
+df = pd.read_csv("data/tennis_players_data.csv", index_col="player_id")
 df = df[df.active == "t"]
 df_radar = df[["name", "matches_win_percentage", "grand_slam_win_percentage", "tour_finals_win_percentage",
                "olympics_matches_win_percentage", "davis_cup_matches_win_percentage", "hard_matches_win_percentage",
