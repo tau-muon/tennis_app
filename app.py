@@ -5,19 +5,24 @@ import os
 import dash
 import pandas as pd
 import plotly.graph_objs as go
+import plotly.express as px
 from dash import html, dcc
 from dash.dependencies import Input, Output
 
 # Read the data
 
+dirname = os.path.dirname(__file__)
+path = os.path.join(dirname, "data/")
 
-df = pd.read_csv("data/tennis_players_data.csv", index_col="player_id")
+df = pd.read_csv(path + "tennis_players_data.csv", index_col="player_id")
 df = df[df.active == "t"]
 df_radar = df[["name", "matches_win_percentage", "grand_slam_win_percentage", "tour_finals_win_percentage",
                "olympics_matches_win_percentage", "davis_cup_matches_win_percentage", "hard_matches_win_percentage",
                "clay_matches_win_percentage",
                "grass_matches_win_percentage", "carpet_matches_win_percentage", "outdoor_matches_win_percentage",
                "indoor_matches_win_percentage"]]
+
+country_code = dict(df["country_id"])
 
 
 # Function for figures
@@ -59,10 +64,9 @@ def radar_chart(data, player_id_1, player_id_2):
                       title_font_size=40, title_font_color='green', paper_bgcolor='white', plot_bgcolor='red')
 
     return fig
-  
-  # function to show country of both players on map
-  
-  def show_country(player_id_1, player_id_2):
+
+
+def show_country(player_id_1, player_id_2):
     data = df
     player1_country_id = list(data[data.index.isin([player_id_1, player_id_2])]['country_id'])[0]
     player2_country_id = list(data[data.index.isin([player_id_1, player_id_2])]['country_id'])[1]
@@ -75,6 +79,7 @@ def radar_chart(data, player_id_1, player_id_2):
                         color_continuous_scale=px.colors.sequential.Plasma)
     fig.update_layout(title_text='', title_x=0.5, title_y=0.95, title_font_family="Old Standard TT",
                       title_font_size=40, title_font_color='green', paper_bgcolor='white', plot_bgcolor='red')
+    fig.update_layout(height=450, width=600)
     return fig
 
 
