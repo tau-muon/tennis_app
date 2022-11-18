@@ -177,6 +177,19 @@ app.layout = html.Div(
                                                     "display": 'inline-block'
                                             }),
 
+                            html.Img(
+                                src=app.get_asset_url("vs.png"),
+                                style={
+                                    "position": "relative",
+                                    "width": "5%",
+                                    "left": "75px",
+                                    "top": "50px",
+                                    "display": "inline-block",
+                                },
+                            ),
+
+
+
                             html.Div([
                                 html.Label("Select Player 2:"),
                                 html.Br(),
