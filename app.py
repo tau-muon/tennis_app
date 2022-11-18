@@ -145,7 +145,7 @@ app.layout = html.Div(
                                 dcc.Dropdown(
                                     id='dropdown_player_1',
                                     options=[{'label': i, 'value': j} for i, j in dict(zip(df.name, df.index)).items()],
-                                    value=4920),
+                                    value=26006),
                             ],
 
                                 style={
@@ -197,7 +197,7 @@ app.layout = html.Div(
                                 dcc.Dropdown(
                                     id='dropdown_player_2',
                                     options=[{'label': i, 'value': j} for i, j in dict(zip(df.name, df.index)).items()],
-                                    value=4742),
+                                    value=6387),
                             ],
 
                                 style={
