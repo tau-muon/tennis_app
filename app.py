@@ -31,7 +31,7 @@ def radar_chart(data, player_id_1, player_id_2):
     df_graph = data[data.index.isin([player_id_1, player_id_2])]
 
     categories = ['Matches Won', 'Grand Slam Matches Won', 'Tour Finals Matches Won',
-                  'Olympics Matches Won', 'Davius Cup Matches Won', 'Hard Matches Won',
+                  'Olympics Matches Won', 'Davis Cup Matches Won', 'Hard Matches Won',
                   'Clay Matches Won', 'Grass Matches Won', 'Carper Matches Won',
                   'Outdoor Matches Won', 'Indoor Matches Won']
 
@@ -79,8 +79,25 @@ def show_country(player_id_1, player_id_2):
                         color_continuous_scale=px.colors.sequential.Plasma)
     fig.update_layout(title_text='', title_x=0.5, title_y=0.95, title_font_family="Old Standard TT",
                       title_font_size=40, title_font_color='green', paper_bgcolor='white', plot_bgcolor='red')
-    fig.update_layout(height=450, width=600)
+    fig.update_layout(
+        margin=dict(l=20, r=20, t=20, b=20),
+        paper_bgcolor="LightSteelBlue",
+    )
     return fig
+
+
+# ----------18th Nov 2022
+
+def country_id(player_id):
+    data = df
+    country = list(data[data.index.isin([player_id])]['country_id_2'])[0]
+    return country
+
+
+def get_country_flag(player_id):
+    country = country_id(player_id)
+    flag = f"https://countryflagsapi.com/svg/{country}"
+    return flag
 
 
 # ------------------------------------------------------ APP ------------------------------------------------------
@@ -128,7 +145,7 @@ app.layout = html.Div(
                                 dcc.Dropdown(
                                     id='dropdown_player_1',
                                     options=[{'label': i, 'value': j} for i, j in dict(zip(df.name, df.index)).items()],
-                                    value=3819),
+                                    value=4920),
                             ],
 
                                 style={
@@ -136,8 +153,9 @@ app.layout = html.Div(
                                     "display": "inline-block",
                                     "padding-top": "15px",
                                     "padding-bottom": "15px",
-                                    "width": "30%",
+                                    "width": "20%",
                                 }, ),
+
                             html.Img(
                                 src=app.get_asset_url("player1.png"),
                                 style={
@@ -145,8 +163,20 @@ app.layout = html.Div(
                                     "width": "5%",
                                     "left": "10px",
                                     "top": "50px",
+                                    "display": "inline-block",
                                 },
                             ),
+
+                            html.Img(
+                                            id="player1_country_flag",
+                                            style={
+                                                    "position": "relative",
+                                                    "width": "10%",
+                                                    "left": "30px",
+                                                    "top": "50px",
+                                                    "display": 'inline-block'
+                                            }),
+
                             html.Div([
                                 html.Label("Select Player 2:"),
                                 html.Br(),
@@ -154,7 +184,7 @@ app.layout = html.Div(
                                 dcc.Dropdown(
                                     id='dropdown_player_2',
                                     options=[{'label': i, 'value': j} for i, j in dict(zip(df.name, df.index)).items()],
-                                    value=3333),
+                                    value=4742),
                             ],
 
                                 style={
@@ -162,7 +192,7 @@ app.layout = html.Div(
                                     "display": "inline-block",
                                     "padding-top": "15px",
                                     "padding-bottom": "15px",
-                                    "width": "30%",
+                                    "width": "20%",
                                     "position": "relative",
                                     "left": "150px",
                                 }, ),
@@ -171,10 +201,20 @@ app.layout = html.Div(
                                 style={
                                     "position": "relative",
                                     "width": "5%",
-                                    "left": "200px",
+                                    "left": "150px",
                                     "top": "50px",
+                                    "display": "inline-block",
                                 },
                             ),
+                            html.Img(
+                                            id="player2_country_flag",
+                                            style={
+                                                    "position": "relative",
+                                                    "width": "10%",
+                                                    "left": "190px",
+                                                    "top": "50px",
+                                                    "display": "inline-block",
+                                            }),
 
                         ], className="box"),
 
@@ -282,7 +322,7 @@ app.layout = html.Div(
                                                 ),
                                                 ", ",
                                                 html.A(
-                                                    # "Second Refreence",
+                                                    # "Second Reference",
                                                     # href="http://",
                                                     # target="_blank",
                                                 ),
@@ -312,20 +352,43 @@ app.layout = html.Div(
     [Input(component_id='dropdown_player_1', component_property='value'),
      Input(component_id='dropdown_player_2', component_property='value')])
 def update_plot(player1, player2):
-    fig = radar_chart(df_radar, player1, player2)
-    fig.update_layout(template='gridon')
-    return fig
-
+    if player1 != player2:
+        fig = radar_chart(df_radar, player1, player2)
+        fig.update_layout(template='gridon')
+        return fig
+    else:
+        raise PreventUpdate
 
 
 @app.callback(
     Output(component_id='map_chart', component_property='figure'),
-    [Input(component_id='dropdown_player_1',component_property= 'value'),
-    Input(component_id='dropdown_player_2',component_property= 'value')])
+    [Input(component_id='dropdown_player_1', component_property='value'),
+     Input(component_id='dropdown_player_2', component_property='value')])
 def update_plot(player1, player2):
-    fig = show_country(player1, player2)
-    fig.update_layout(template='gridon')
-    return fig
+    if player1 != player2:
+        fig = show_country(player1, player2)
+        fig.update_layout(template='gridon')
+        return fig
+    else:
+        raise PreventUpdate
+
+
+@app.callback(Output("player1_country_flag", "src"),
+              [Input(component_id='dropdown_player_1', component_property='value')])
+def update_flag2(player_id):
+    if player_id is not None:
+        return get_country_flag(player_id)
+    else:
+        raise PreventUpdate
+
+
+@app.callback(Output("player2_country_flag", "src"),
+              [Input(component_id='dropdown_player_2', component_property='value')])
+def update_flag2(player_id):
+    if player_id is not None:
+        return get_country_flag(player_id)
+    else:
+        raise PreventUpdate
 
 
 if __name__ == '__main__':
