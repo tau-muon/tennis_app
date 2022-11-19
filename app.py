@@ -242,7 +242,12 @@ app.layout = html.Div(
                                                 html.Label(id="title_bar"),
                                                 dcc.Graph(id="radar_chart"),
                                                 html.Div(
-                                                    [html.P(id="comment")],
+                                                    [html.P(id="comment", children='This is a Radar Chart comparing '
+                                                                                   'two selected players on '
+                                                                                   'performance metric of ratio of '
+                                                                                   'matches won in different '
+                                                                                   'tournaments and surfaces, '
+                                                                                   'each color represent one player.')],
                                                     className="box_comment",
                                                 ),
                                             ],
@@ -260,7 +265,10 @@ app.layout = html.Div(
                                                 html.Label(id="title_bar2"),
                                                 dcc.Graph(id="map_chart"),
                                                 html.Div(
-                                                    [html.P(id="comment2")],
+                                                    [html.P(id="comment2", children="This is a choropleth map showing "
+                                                                                    "the location of countries where "
+                                                                                    "the two selected players are "
+                                                                                    "from.")],
                                                     className="box_comment",
                                                 ),
 
@@ -270,7 +278,7 @@ app.layout = html.Div(
                                         ),
 
                                     ],
-                                    style={"width": "40%", "display": "inline-block"},
+                                    style={"width": "60%", "display": "inline-block"},
                                 ),
                             ],
                             className="box",
